@@ -1,0 +1,11 @@
+{
+  "version": "2026-09-08",
+  "theme": "涉网络开盒、人肉搜索的裁判规则",
+  "reason_codes": [
+    "DUPLICATE_ATTACHMENT",
+    "RETENTION_DUE",
+    "ROLE_FIELD_DENIED",
+    "PRIORITY_RECALCULATED"
+  ],
+  "notes": "所有风险分派与保留期限均以本地规则为准，运行时不得获取远程数据。"
+}

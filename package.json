@@ -1,0 +1,12 @@
+{
+  "name": "usr-090901-001-scaffold",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "validate:scaffold": "node scaffold/validate.mjs"
+  }
+}

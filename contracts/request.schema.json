@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "网络开盒举报处理请求",
+  "type": "object",
+  "required": [
+    "request_id",
+    "operation",
+    "case_id",
+    "actor_role",
+    "occurred_at",
+    "payload"
+  ],
+  "properties": {
+    "request_id": {},
+    "operation": {},
+    "case_id": {},
+    "actor_role": {},
+    "occurred_at": {},
+    "payload": {}
+  },
+  "additionalProperties": false
+}
