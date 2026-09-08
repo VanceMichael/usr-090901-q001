@@ -1,0 +1,14 @@
+[
+  {
+    "source_event_id": "evt-1001",
+    "case_id": "case-7",
+    "version": 1,
+    "actor_role": "reviewer",
+    "evidence": [
+      {
+        "kind": "url",
+        "digest": "sha256:abc123"
+      }
+    ]
+  }
+]
