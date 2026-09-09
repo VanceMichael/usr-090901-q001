@@ -1,20 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "网络开盒证据保全与处置服务 request",
+  "title": "网络开盒举报处理请求",
   "type": "object",
   "required": [
-    "source_event_id",
+    "request_id",
+    "operation",
     "case_id",
-    "version",
     "actor_role",
-    "evidence"
+    "occurred_at",
+    "payload"
   ],
   "properties": {
-    "source_event_id": {},
+    "request_id": {},
+    "operation": {},
     "case_id": {},
-    "version": {},
     "actor_role": {},
-    "evidence": {}
+    "occurred_at": {},
+    "payload": {}
   },
   "additionalProperties": false
 }

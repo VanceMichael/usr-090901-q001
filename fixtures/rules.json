@@ -2,9 +2,10 @@
   "version": "2026-09-08",
   "theme": "涉网络开盒、人肉搜索的裁判规则",
   "reason_codes": [
-    "ABUSE_EVIDENCE",
-    "HASH_CHAIN",
-    "OPTIMISTIC_LOCK"
+    "DUPLICATE_ATTACHMENT",
+    "RETENTION_DUE",
+    "ROLE_FIELD_DENIED",
+    "PRIORITY_RECALCULATED"
   ],
-  "notes": "Deterministic evaluation fixture; implementation must not fetch remote data."
+  "notes": "所有风险分派与保留期限均以本地规则为准，运行时不得获取远程数据。"
 }

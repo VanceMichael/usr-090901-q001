@@ -1,15 +1,11 @@
-# 网络开盒证据保全与处置服务 scaffold
+# 网络开盒举报分派与材料保留服务
 
-This repository is an intentionally incomplete starting point for a pure backend service. It contains input contracts, deterministic fixtures, and a Docker-based scaffold validator; no requested business API is implemented.
+该项目保存举报信封、附件索引、风险分派和材料保留期限的基础契约，供平台安全团队建设纯后台案件处理服务。技术环境为 Node.js 22、TypeScript、PostgreSQL 和 Docker Compose，仓库当前只提供可复现的输入资料与格式校验，不包含业务接口和持久化实现。
 
-Business theme: 涉网络开盒、人肉搜索的裁判规则
-Theme source: https://www.chinanews.com/scroll-news/news1.html
-Required stack: Node.js 22, TypeScript, PostgreSQL, Docker Compose
-
-Validate the baseline inputs with:
+使用以下命令检查请求契约、样例和规则文件能否被容器正确读取：
 
 ```sh
 docker compose run --rm --no-deps scaffold-check
 ```
 
-The implementation must preserve the contracts and fixtures, add the service and its automated tests, and provide a repeatable Docker-based black-box self-test. External production systems must not be used.
+业务服务应以仓库内规则为准，并在本地容器网络中完成验证。开发和运行过程不得连接外部内容识别或身份系统。
