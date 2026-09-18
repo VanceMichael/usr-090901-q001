@@ -1,12 +1,25 @@
 {
-  "name": "usr-090901-001-scaffold",
-  "version": "0.0.0",
+  "name": "unboxing-triage-service",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "validate:scaffold": "node scaffold/validate.mjs"
+    "validate:scaffold": "node scaffold/validate.mjs",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
+    "start": "node dist/server.js",
+    "dev": "node --import ./test/register-hooks.mjs --experimental-strip-types src/server.ts",
+    "test": "node --import ./test/register-hooks.mjs --test --experimental-strip-types --test-concurrency=1 test/*.test.ts",
+    "blackbox": "node scripts/blackbox.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
   }
 }

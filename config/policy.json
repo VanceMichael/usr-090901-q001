@@ -1,0 +1,154 @@
+{
+  "version": "2026-09-08",
+  "theme": "涉网络开盒、人肉搜索举报的本地分派与保留策略",
+  "notes": "所有风险分派与保留期限均以本地规则为准，运行时不得获取远程数据。",
+  "reason_codes": [
+    "DUPLICATE_ATTACHMENT",
+    "RETENTION_DUE",
+    "ROLE_FIELD_DENIED",
+    "PRIORITY_RECALCULATED"
+  ],
+  "source_channels": {
+    "user_report": { "label": "用户自助举报", "allowed": true, "base_risk": 20, "trust": 1.0 },
+    "hotline": { "label": "客服热线录入", "allowed": true, "base_risk": 25, "trust": 1.0 },
+    "partner_forward": { "label": "合作机构转交", "allowed": true, "base_risk": 35, "trust": 0.8 },
+    "internal_scan": { "label": "内部巡查发现", "allowed": true, "base_risk": 45, "trust": 1.0 },
+    "regulator": { "label": "监管部门交办", "allowed": true, "base_risk": 55, "trust": 1.0 },
+    "anonymous_feed": { "label": "匿名投喂渠道", "allowed": false, "base_risk": 0, "trust": 0.0 }
+  },
+  "time_window_minutes": 10080,
+  "future_skew_seconds": 300,
+  "retention": {
+    "min_days": 1,
+    "max_days": 365,
+    "default_days": 30,
+    "by_channel": {
+      "regulator": 90,
+      "internal_scan": 60
+    }
+  },
+  "attachment": {
+    "kinds": ["url", "screenshot", "video", "archive", "document"],
+    "digest_pattern": "^sha256:[a-fA-F0-9]{6,128}$",
+    "kind_weights": {
+      "url": 5,
+      "screenshot": 10,
+      "video": 15,
+      "archive": 12,
+      "document": 8
+    },
+    "max_per_request": 100
+  },
+  "risk": {
+    "flags": {
+      "minor_involved": 40,
+      "coordinated": 25,
+      "real_name_leak": 30,
+      "ongoing": 15,
+      "repeat_target": 10
+    },
+    "levels": [
+      { "min": 80, "priority": "P0", "queue": "q_critical" },
+      { "min": 55, "priority": "P1", "queue": "q_high" },
+      { "min": 30, "priority": "P2", "queue": "q_standard" },
+      { "min": 0, "priority": "P3", "queue": "q_review" }
+    ]
+  },
+  "expiry_by_priority": {
+    "P0": "anonymize",
+    "P1": "redact_sensitive",
+    "P2": "redact_sensitive",
+    "P3": "delete_record"
+  },
+  "sensitive_fields": [
+    "reporter_name",
+    "reporter_contact",
+    "subject_name",
+    "subject_id_number",
+    "subject_phone",
+    "subject_address",
+    "account_handles",
+    "url",
+    "content_excerpt",
+    "internal_notes",
+    "evidence_location"
+  ],
+  "roles": {
+    "admin": {
+      "label": "安全管理员",
+      "allow": ["*"],
+      "unredacted": true
+    },
+    "reviewer": {
+      "label": "分派审核员",
+      "allow": [
+        "case_id",
+        "request_id",
+        "source_channel",
+        "occurred_at",
+        "registered_at",
+        "priority",
+        "queue",
+        "risk_score",
+        "status",
+        "retention_days",
+        "expires_at",
+        "risk_flags",
+        "attachments",
+        "reason_codes",
+        "subject_name",
+        "subject_phone",
+        "subject_address",
+        "account_handles",
+        "url",
+        "content_excerpt"
+      ],
+      "redact": [
+        "subject_name",
+        "subject_phone",
+        "subject_address",
+        "account_handles",
+        "url",
+        "content_excerpt"
+      ]
+    },
+    "operator": {
+      "label": "处置操作员",
+      "allow": [
+        "case_id",
+        "source_channel",
+        "priority",
+        "queue",
+        "status",
+        "retention_days",
+        "expires_at",
+        "expiry_action",
+        "scheduled_for",
+        "attachments"
+      ],
+      "attachments_fields": ["attachment_id", "kind", "ref_to"]
+    },
+    "auditor": {
+      "label": "合规审计员",
+      "allow": [
+        "case_id",
+        "request_id",
+        "source_channel",
+        "occurred_at",
+        "registered_at",
+        "priority",
+        "queue",
+        "risk_score",
+        "status",
+        "retention_days",
+        "expires_at",
+        "expiry_action",
+        "scheduled_for",
+        "risk_flags",
+        "attachments",
+        "reason_codes"
+      ],
+      "attachments_fields": ["attachment_id", "kind", "digest", "ref_to", "duplicate"]
+    }
+  }
+}

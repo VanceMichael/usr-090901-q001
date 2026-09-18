@@ -1,22 +1,60 @@
 services:
+  app:
+    build:
+      context: .
+      target: runtime
+    image: unboxing-triage:local
+    environment:
+      PORT: "8080"
+      DB_PATH: /data/triage.db
+      POLICY_PATH: /app/config/policy.json
+      # 仅本地容器验证用：允许黑盒脚本以未来 as_of 触发到期清理；生产部署应删除此行
+      ALLOW_CLOCK_OVERRIDE: "true"
+    ports:
+      - "8080:8080"
+    volumes:
+      - triage-data:/data
+    restart: unless-stopped
+
+  # 黑盒阶段 1：重启前登记/去重/重算/部分清理（由 scripts/e2e.sh 调用）
+  blackbox-seed:
+    image: unboxing-triage:local
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://app:8080
+    command: ["node", "scripts/blackbox.mjs", "seed", "/data/blackbox-state.json"]
+    volumes:
+      - triage-data:/data
+
+  # 黑盒阶段 2：app 重启后验证队列顺序、引用关系与清理计划恢复（由 scripts/e2e.sh 调用）
+  blackbox-verify:
+    image: unboxing-triage:local
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://app:8080
+    command: ["node", "scripts/blackbox.mjs", "verify", "/data/blackbox-state.json"]
+    volumes:
+      - triage-data:/data
+
+  # 容器内自动化测试（node:test，真实 HTTP，临时 SQLite 文件）
+  test:
+    build:
+      context: .
+      target: test
+    image: unboxing-triage:test
+    command: ["npm", "test"]
+
+  # 仓库自带的契约/样例/规则可读性检查
   scaffold-check:
     image: node:22-alpine
     working_dir: /workspace
     volumes:
       - .:/workspace:ro
     command: node /workspace/scaffold/validate.mjs
-  postgres:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: local-dev-only
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d app"]
-      interval: 2s
-      timeout: 2s
-      retries: 20
-    volumes:
-      - app-data:/var/lib/postgresql/data
+
 volumes:
-  app-data:
+  triage-data:
