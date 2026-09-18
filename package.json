@@ -1,12 +1,23 @@
 {
-  "name": "usr-090901-001-scaffold",
-  "version": "0.0.0",
+  "name": "unboxing-report-dispatch",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.5.0"
   },
   "scripts": {
-    "validate:scaffold": "node scaffold/validate.mjs"
+    "validate:scaffold": "node scaffold/validate.mjs",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "start": "node --experimental-sqlite dist/index.js",
+    "dev": "node --experimental-sqlite --experimental-strip-types src/index.ts",
+    "test": "node --experimental-sqlite --test --import tsx --test-concurrency=1 test/*.test.ts",
+    "blackbox": "node scripts/blackbox.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }

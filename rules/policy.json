@@ -1,0 +1,125 @@
+{
+  "version": "2026-09-08",
+  "theme": "涉网络开盒、人肉搜索举报的本地分派与保留规则",
+  "source_channels": {
+    "government_notice": { "base_score": 80, "retention_min_days": 30, "retention_max_days": 3650 },
+    "hotline": { "base_score": 60, "retention_min_days": 7, "retention_max_days": 365 },
+    "user_report": { "base_score": 45, "retention_min_days": 7, "retention_max_days": 180 },
+    "partner_tip": { "base_score": 35, "retention_min_days": 3, "retention_max_days": 180 },
+    "self_submission": { "base_score": 15, "retention_min_days": 1, "retention_max_days": 90 }
+  },
+  "time_window": {
+    "max_age_days": 30,
+    "future_skew_seconds": 300
+  },
+  "retention": {
+    "absolute_min_days": 1,
+    "absolute_max_days": 3650
+  },
+  "attachments": {
+    "kinds": ["url", "screenshot", "document", "archive", "video", "other"],
+    "digest_pattern": "^sha256:[a-fA-F0-9]{1,128}$",
+    "max_per_request": 100,
+    "kind_weights": {
+      "url": 5,
+      "screenshot": 10,
+      "document": 8,
+      "archive": 12,
+      "video": 15,
+      "other": 2
+    }
+  },
+  "risk_tags": {
+    "minor_involved": 35,
+    "self_harm_risk": 30,
+    "ongoing_harassment": 25,
+    "credible_threat": 20,
+    "real_name_doxxed": 20,
+    "mass_distribution": 20,
+    "repeat_offender": 15
+  },
+  "risk": {
+    "duplicate_attachment_weight": 0,
+    "first_attachment_weight": 6,
+    "score_cap": 100
+  },
+  "priority_levels": [
+    { "min_score": 85, "level": "critical", "queue": "triage-urgent" },
+    { "min_score": 60, "level": "high", "queue": "triage-high" },
+    { "min_score": 40, "level": "normal", "queue": "triage-standard" },
+    { "min_score": 0, "level": "low", "queue": "triage-low" }
+  ],
+  "sensitive_fields": [
+    "reporter_contact",
+    "subject_real_name",
+    "subject_id_number",
+    "subject_address",
+    "evidence_urls",
+    "internal_note"
+  ],
+  "cleanup_action": "purge_sensitive_fields",
+  "card_fields": [
+    "case_id",
+    "source_channel",
+    "occurred_at",
+    "registered_at",
+    "recalculated_at",
+    "priority_score",
+    "priority_level",
+    "queue",
+    "queue_seq",
+    "status",
+    "retention_days",
+    "expires_at",
+    "purged_at",
+    "attachment_count",
+    "duplicate_count",
+    "risk_tags",
+    "risk_factors",
+    "summary",
+    "attachment_refs"
+  ],
+  "roles": {
+    "triager": [
+      "case_id",
+      "source_channel",
+      "occurred_at",
+      "registered_at",
+      "priority_score",
+      "priority_level",
+      "queue",
+      "queue_seq",
+      "status",
+      "expires_at",
+      "attachment_count",
+      "duplicate_count",
+      "risk_tags",
+      "risk_factors"
+    ],
+    "analyst": [
+      "*card*"
+    ],
+    "reviewer": [
+      "*card*",
+      "reporter_contact",
+      "subject_real_name",
+      "subject_address",
+      "evidence_urls",
+      "internal_note"
+    ],
+    "auditor": [
+      "*card*",
+      "retention_days",
+      "purged_at",
+      "cleanup_events",
+      "subject_id_number"
+    ],
+    "admin": ["*"]
+  },
+  "reason_codes": [
+    "DUPLICATE_ATTACHMENT",
+    "RETENTION_DUE",
+    "ROLE_FIELD_DENIED",
+    "PRIORITY_RECALCULATED"
+  ]
+}
